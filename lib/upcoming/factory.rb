@@ -11,8 +11,8 @@ module Upcoming
     end
 
     def each
-      from = @options[:from]
-      generator = Upcoming.const_get("#{@options[:every].to_s.classify}Generator").new
+      generator = create_generator
+      from = options[:from]
       (1..Float::INFINITY).each do |n|
         date = generator.next(from)
         yield date
@@ -34,6 +34,11 @@ module Upcoming
         end
         result[:from] = Date.today if result[:from] == :today
       end
+    end
+
+    def create_generator
+      generator_class = Upcoming.const_get("#{options[:every].to_s.classify}Generator")
+      generator_class.new
     end
 
   end

@@ -1,7 +1,9 @@
 module Upcoming
   class DayGenerator
-    def next(from)
-      from + 1
+    include Generator
+
+    def valid?(date)
+      true
     end
   end
 end
