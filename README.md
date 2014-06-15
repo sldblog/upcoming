@@ -8,7 +8,8 @@ Recurring date sequence generator.
 ## Examples
 
 ```ruby
-> factory = Upcoming.for(every: :last_day_of_month)
+# running on 15th of June, 2014
+> factory = Upcoming.every(:last_day_of_month)
 => #<Upcoming::Factory:0xb8d734e0 @options={:every=>:last_day_of_month, :from=>#<Date: 2014-06-15 ((2456824j,0s,0n),+0s,2299161j)>}>
 
 > factory.first
@@ -25,7 +26,7 @@ The available generators are in `lib/upcoming/generators`. They are mapped to th
 Chain generators together with tests, modifying the result to the next matching either forwards or backwards. If, for example, I want to know the dates for all payments that will happen on last day of the month -- except when that's not a working day in which case it should arrive the working day before.
 
 ```ruby
-> Upcoming.for(every: :last_day_of_month, from: '2014-08-20').then_test(for: :working_day, on_fail: :previous).first
+> Upcoming.every(:last_day_of_month, from: '2014-08-20').then_test_for(:working_day, on_fail: :previous).first
 => 2014-08-29
 ```
 

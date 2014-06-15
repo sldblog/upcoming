@@ -1,5 +1,5 @@
 module Upcoming
-  def self.for(config = {})
-    Upcoming::Factory.new(config)
+  def self.every(name, options = {})
+    Upcoming::Factory.new(options.merge(every: name))
   end
 end
