@@ -1,5 +1,5 @@
 require 'date'
-require 'active_support/core_ext'
+require 'active_support/core_ext/string'
 
 module Upcoming
   class Factory
@@ -12,7 +12,7 @@ module Upcoming
 
     def each
       from = @options[:from]
-      generator = Kernel::const_get("Upcoming::#{@options[:every].to_s.classify}Generator").new
+      generator = Upcoming.const_get("#{@options[:every].to_s.classify}Generator").new
       (1..Float::INFINITY).each do |n|
         date = generator.next(from)
         yield date
