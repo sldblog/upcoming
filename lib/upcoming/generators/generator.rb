@@ -1,9 +1,8 @@
 module Upcoming
-  module Generator
+  class Generator
     def next(from)
-      date = from + 1
-      date += 1 until valid?(date)
-      date
+      valid_offset = (0..Float::INFINITY).find { |offset| valid?(from + offset) }
+      from + valid_offset
     end
   end
 end

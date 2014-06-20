@@ -4,17 +4,26 @@ require 'active_support/core_ext/string'
 module Upcoming
   class Factory
     include Enumerable
-    attr_reader :options
 
     def initialize(options = {})
       @options = parse(options)
+      @chain = []
+    end
+
+    def self.every(method, options = {})
+      new(options).then_find_first method
+    end
+
+    def then_find_first(method)
+      @chain << create_generator(method)
+      self
     end
 
     def each
-      generator = create_generator
-      from = options[:from]
-      (1..Float::INFINITY).each do |n|
-        date = generator.next(from)
+      from = @options[:from]
+      while true do
+        from += 1
+        date = @chain.inject(from) { |date, generator| generator.next(date) }
         yield date
         from = date
       end
@@ -23,21 +32,18 @@ module Upcoming
     private
 
     def parse(options)
-      options.dup.tap do |result|
-        result[:every] ||= :day
-        result[:from] ||= :today
-
-        if result[:from].is_a? String
-          iso = result[:from] =~ /\d{4}-\d{2}-\d{2}/
-          raise ArgumentError, 'Please use ISO dates (YYYY-MM-DD) as those are not ambigious.' unless iso
-          result[:from] = Date.parse(result[:from])
-        end
-        result[:from] = Date.today if result[:from] == :today
+      options[:from] ||= Date.today
+      if options[:from].is_a? String
+        iso = options[:from] =~ /\d{4}-\d{2}-\d{2}/
+        raise ArgumentError, 'Please use ISO dates (YYYY-MM-DD) as those are not ambigious.' unless iso
+        options[:from] = Date.parse(options[:from])
       end
+      options
     end
 
-    def create_generator
-      generator_class = Upcoming.const_get("#{options[:every].to_s.classify}Generator")
+    def create_generator(name)
+      class_name = name.to_s.classify + 'Generator'
+      generator_class = Upcoming.const_get class_name
       generator_class.new
     end
 

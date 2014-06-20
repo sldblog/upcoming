@@ -3,21 +3,21 @@ require 'spec_helper'
 describe Upcoming::LastDayOfMonthGenerator do
 
   Given(:subject) { Upcoming::LastDayOfMonthGenerator.new }
-  When(:result) { subject.next(date) }
+  When(:valid) { subject.valid?(date) }
 
-  context 'returns last day of month' do
+  context 'not valid on not last day of month' do
     Given(:date) { Date.parse('2014-06-15') }
-    Then { result == Date.parse('2014-06-30') }
+    Then { !valid }
   end
 
-  context 'returns next months last day when called with last day' do
+  context 'valid on last day of month' do
     Given(:date) { Date.parse('2014-05-31') }
-    Then { result == Date.parse('2014-06-30') }
+    Then { valid }
   end
 
-  context 'returns leap day correctly in case of leap year' do
-    Given(:date) { Date.parse('2012-01-31') }
-    Then { result == Date.parse('2012-02-29') }
+  context 'valid on leap day' do
+    Given(:date) { Date.parse('2012-02-29') }
+    Then { valid }
   end
 
 end

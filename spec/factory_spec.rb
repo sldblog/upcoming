@@ -2,70 +2,61 @@ require 'spec_helper'
 
 describe Upcoming::Factory do
 
-  let(:today) { Date.today }
-
-  context 'generates any number of dates' do
-    Given(:upcoming) { Upcoming::Factory.new }
-    Then { upcoming.take(2).size == 2 }
-    And { upcoming.take(20).size == 20 }
-  end
-
-  context 'configuration' do
-    When(:upcoming) { Upcoming::Factory.new(config) }
-    When(:options) { upcoming.options }
-
-    context 'defaults to daily recurrence from today' do
-      Given(:config) { {} }
-      Then { options == {every: :day, from: today} }
-    end
-
-    context 'options is configured through constructor' do
-      Given(:config) { {every: :bazooka, from: :other} }
-      Then { options == config }
-    end
-
-    context 'dates' do
-      context 'from dates other than strings are copied as-is' do
-        Given(:config) { {from: 42} }
-        Then { options[:from] == 42 }
-      end
-
-      context 'from date can be given as Date' do
-        Given(:config) { {from: Date.parse('2001-10-10')} }
-        Then { options[:from] == config[:from] }
-      end
-
-      context 'string ISO dates are converted automatically' do
-        Given(:config) { {from: '2000-01-01'} }
-        Then { options[:from] == Date.parse('2000-01-01') }
-      end
-
-      context 'non-ISO strings raise ambiguity error' do
-        Given(:config) { {from: '12/01/2000'} }
-        Then { upcoming.must_raise ArgumentError, /Please use ISO dates (YYYY-MM-DD) as those are not ambigious./ }
-      end
+  class Upcoming::FizzGenerator < Upcoming::Generator
+    def valid?(date)
+      date.day % 3 == 0
     end
   end
 
-  context 'execution' do
-    module Upcoming
-      class DeepThoughtGenerator
-        def next(from)
-          from + 42
-        end
+  class Upcoming::BuzzGenerator < Upcoming::Generator
+    def valid?(date)
+      date.day % 5 == 0
+    end
+  end
+
+  Given(:fixed_date) { Date.parse('2014-06-15') }
+  When(:result) do
+    Date.stub :today, fixed_date do
+      subject.take(3).map(&:iso8601)
+    end
+  end
+
+  context 'must be enumerable' do
+    Given(:subject) { Upcoming::Factory.every(:fizz) }
+    Then { subject.class.include? Enumerable }
+    Then { subject.respond_to? :each }
+  end
+
+  context '#every' do
+    context 'generates a sequence of days matching method given' do
+      Given(:subject) { Upcoming::Factory.every(:fizz) }
+      Then { result == %w(2014-06-18 2014-06-21 2014-06-24) }
+    end
+
+    context 'generates a sequence from the given start date' do
+      Given(:subject) { Upcoming::Factory.every(:fizz, from: date) }
+
+      context 'given as ISO date' do
+        Given(:date) { '2014-06-20' }
+        Then { result == %w(2014-06-21 2014-06-24 2014-06-27) }
+      end
+
+      context 'given as Date object' do
+        Given(:date) { Date.parse('2014-05-01') }
+        Then { result == %w(2014-05-03 2014-05-06 2014-05-09) }
+      end
+
+      context 'generates error if given as non-ISO date' do
+        Given(:date) { '01/05/2014' }
+        Then { result == Failure(ArgumentError, /Please use ISO dates \(YYYY-MM-DD\) as those are not ambigious/) }
       end
     end
+  end
 
-    Given(:upcoming) { Upcoming::Factory.new(every: :deep_thought) }
-
-    context 'invokes generator based on the name of "every" parameter' do
-      When(:result) { upcoming.first }
-      Then { result == today + 42 }
-    end
-
-    context 'invokes generator with previous result iteratively' do
-      When(:result) { upcoming.take(3) }
-      Then { result == [today + 42, today + 84, today + 126] }
+  context '#then_find_first' do
+    context 'modifies date found by moving to the next date that is a match' do
+      Given(:subject) { Upcoming::Factory.every(:buzz).then_find_first(:fizz) }
+      Then { result == %w(2014-06-21 2014-06-27 2014-06-30) }
     end
   end
 

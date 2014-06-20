@@ -1,7 +1,5 @@
 module Upcoming
-  class WorkingDayGenerator
-    include Generator
-
+  class WorkingDayGenerator < Generator
     WEEKDAYS = (1..5)
 
     def valid?(date)

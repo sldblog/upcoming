@@ -1,7 +1,5 @@
 module Upcoming
-  class LastDayOfMonthGenerator
-    include Generator
-
+  class LastDayOfMonthGenerator < Generator
     def valid?(date)
       (date + 1).month != date.month
     end
