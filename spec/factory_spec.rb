@@ -46,6 +46,11 @@ describe Upcoming::Factory do
         Then { result == %w(2014-05-03 2014-05-06 2014-05-09) }
       end
 
+      context 'given something responding to :to_date' do
+        Given(:date) { OpenStruct.new(to_date: Date.parse('2014-08-17')) }
+        Then { result == %w(2014-08-18 2014-08-21 2014-08-24) }
+      end
+
       context 'generates error if given as non-ISO date' do
         Given(:date) { '01/05/2014' }
         Then { result == Failure(ArgumentError, /Please use ISO dates \(YYYY-MM-DD\) as those are not ambigious/) }
