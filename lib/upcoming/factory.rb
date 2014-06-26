@@ -11,11 +11,16 @@ module Upcoming
     end
 
     def self.every(method, options = {})
-      new(options).then_find_first method
+      new(options).then_find_first(method)
     end
 
     def then_find_first(method)
-      @chain << create_generator(method)
+      @chain << create_generator(method, :first)
+      self
+    end
+
+    def then_find_latest(method)
+      @chain << create_generator(method, :latest)
       self
     end
 
@@ -23,9 +28,9 @@ module Upcoming
       from = @options[:from]
       while true do
         from += 1
-        date = @chain.inject(from) { |date, generator| generator.next(date) }
-        yield date
-        from = date
+        next_date = @chain.first.step(from)
+        yield @chain[1..-1].inject(next_date) { |date, generator| generator.step(date) }
+        from = next_date
       end
     end
 
@@ -41,10 +46,10 @@ module Upcoming
       options
     end
 
-    def create_generator(name)
+    def create_generator(name, direction)
       class_name = name.to_s.classify + 'Generator'
       generator_class = Upcoming.const_get class_name
-      generator_class.new
+      generator_class.new(choose: direction)
     end
 
   end

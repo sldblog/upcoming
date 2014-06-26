@@ -30,16 +30,16 @@ It is possible to chain methods together. Running sequentially, the methods will
 => ["2014-06-30", "2014-07-31", "2014-09-01", "2014-09-30", "2014-10-31", "2014-12-01", "2014-12-31", "2015-02-02", "2015-03-02", "2015-03-31", "2015-04-30", "2015-06-01"]
 ```
 
-The available generators are in `lib/upcoming/generators`. They are mapped to the symbol by converting snake case to camel case and postfixing `Generator`. They can be anywhere in the load path.
-
-## Todo
-
 Chaining backwards:
 
 ```ruby
 > Upcoming::Factory.every(:last_day_of_month, from: '2014-08-20').then_find_latest(:working_day).first
 => 2014-08-29
 ```
+
+## Generators
+
+The available generators are in `lib/upcoming/generators`. They are mapped to the symbol by converting snake case to camel case and postfixing `Generator`. They can be anywhere in the load path.
 
 ## License
 

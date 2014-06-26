@@ -53,10 +53,31 @@ describe Upcoming::Factory do
     end
   end
 
-  context '#then_find_first' do
-    context 'modifies date found by moving to the next date that is a match' do
-      Given(:subject) { Upcoming::Factory.every(:buzz).then_find_first(:fizz) }
-      Then { result == %w(2014-06-21 2014-06-27 2014-06-30) }
+  context 'chained generators' do
+    class Upcoming::MonthAgoIfTwentyFifthGenerator < Upcoming::Generator
+      def step(date)
+        return date.prev_month if date.day == 25
+        date
+      end
+    end
+
+    context 'chains do not alter main sequence' do
+      Given(:subject) { Upcoming::Factory.every(:buzz).then_find_latest(:month_ago_if_twenty_fifth) }
+      Then { result == %w(2014-06-20 2014-05-25 2014-06-30) }
+    end
+
+    context '#then_find_first' do
+      context 'modifies date found by moving to the next date that is a match' do
+        Given(:subject) { Upcoming::Factory.every(:buzz).then_find_first(:fizz) }
+        Then { result == %w(2014-06-21 2014-06-27 2014-06-30) }
+      end
+    end
+
+    context '#then_find_latest' do
+      context 'modifies date found by moving to the previous date that is a match' do
+        Given(:subject) { Upcoming::Factory.every(:buzz).then_find_latest(:fizz) }
+        Then { result == %w(2014-06-18 2014-06-24 2014-06-30) }
+      end
     end
   end
 
