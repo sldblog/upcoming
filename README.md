@@ -14,7 +14,7 @@ Recurring date sequence generator.
 ```ruby
 # running on 20th of June, 2014
 > factory = Upcoming::Factory.every(:last_day_of_month)
-=> #<Upcoming::Factory:0xb82fb490 @options={:from=>#<Date: 2014-06-20 ((2456829j,0s,0n),+0s,2299161j)>}, @chain=[#<Upcoming::LastDayOfMonthGenerator:0xb82fb094>]>
+=> #<Upcoming::Factory:0xb8ba6838 @options={:from=>#<Date: 2014-06-20 ((2456829j,0s,0n),+0s,2299161j)>}, @chain=[#<Upcoming::LastDayOfMonthGenerator:0xb8ba6310 @choose=:first>]>
 
 > factory.first
 => #<Date: 2014-06-30 ((2456839j,0s,0n),+0s,2299161j)>
@@ -34,7 +34,7 @@ Chaining backwards:
 
 ```ruby
 > Upcoming::Factory.every(:last_day_of_month, from: '2014-08-20').then_find_latest(:working_day).first
-=> 2014-08-29
+=> #<Date: 2014-08-29 ((2456899j,0s,0n),+0s,2299161j)>
 ```
 
 ## Generators
