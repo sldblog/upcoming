@@ -4,7 +4,7 @@ describe Upcoming::WorkingDayGenerator do
 
   Given(:subject) { Upcoming::WorkingDayGenerator.new }
 
-  context 'returns invalid for weekends' do
+  context 'weekends are invalid' do
     Given(:saturday) { Date.parse('2014-06-14') }
     Given(:sunday) { Date.parse('2014-06-15') }
 
@@ -12,7 +12,7 @@ describe Upcoming::WorkingDayGenerator do
     Then { !subject.valid?(sunday) }
   end
 
-  context 'returns next workday when given workday' do
+  context 'weekdays are valid' do
     Given(:monday) { Date.parse('2014-06-16') }
     Given(:tuesday) { monday + 1 }
     Given(:wednesday) { tuesday + 1 }
