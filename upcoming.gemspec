@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ['david.lantos@gmail.com']
   s.homepage    = 'https://github.com/sldblog/upcoming'
 
-  s.required_ruby_version = '>= 2.0'
+  s.required_ruby_version = '>= 2.2.2'
 
   s.add_dependency 'activesupport', '~> 5.0'
   %w(rake minitest-given).each do |d|
