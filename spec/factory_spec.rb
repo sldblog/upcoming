@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Upcoming::Factory do
-
   class Upcoming::FizzGenerator < Upcoming::Generator
     def valid?(date)
       date.day % 3 == 0
@@ -67,23 +66,22 @@ describe Upcoming::Factory do
     end
 
     context 'chains do not alter main sequence' do
-      Given(:subject) { Upcoming::Factory.every(:buzz).then_find_latest(:month_ago_if_twenty_fifth) }
+      Given(:subject) { Upcoming::Factory.every(:buzz).then_find_preceding(:month_ago_if_twenty_fifth) }
       Then { result == %w(2014-06-20 2014-05-25 2014-06-30) }
     end
 
-    context '#then_find_first' do
+    context '#then_find_upcoming' do
       context 'modifies date found by moving to the next date that is a match' do
-        Given(:subject) { Upcoming::Factory.every(:buzz).then_find_first(:fizz) }
+        Given(:subject) { Upcoming::Factory.every(:buzz).then_find_upcoming(:fizz) }
         Then { result == %w(2014-06-21 2014-06-27 2014-06-30) }
       end
     end
 
-    context '#then_find_latest' do
+    context '#then_find_preceding' do
       context 'modifies date found by moving to the previous date that is a match' do
-        Given(:subject) { Upcoming::Factory.every(:buzz).then_find_latest(:fizz) }
+        Given(:subject) { Upcoming::Factory.every(:buzz).then_find_preceding(:fizz) }
         Then { result == %w(2014-06-18 2014-06-24 2014-06-30) }
       end
     end
   end
-
 end

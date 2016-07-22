@@ -11,16 +11,16 @@ module Upcoming
     end
 
     def self.every(method, options = {})
-      new(options).then_find_first(method)
+      new(options).then_find_upcoming(method)
     end
 
-    def then_find_first(method)
-      @chain << create_generator(method, :first)
+    def then_find_upcoming(method)
+      @chain << create_generator(method, :upcoming)
       self
     end
 
-    def then_find_latest(method)
-      @chain << create_generator(method, :latest)
+    def then_find_preceding(method)
+      @chain << create_generator(method, :preceding)
       self
     end
 
@@ -51,6 +51,5 @@ module Upcoming
       generator_class = Upcoming.const_get class_name
       generator_class.new(choose: direction)
     end
-
   end
 end

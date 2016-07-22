@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Upcoming::WorkingDayGenerator do
-
   Given(:subject) { Upcoming::WorkingDayGenerator.new }
 
   context 'weekends are invalid' do
@@ -25,5 +24,4 @@ describe Upcoming::WorkingDayGenerator do
     Then { subject.valid?(thursday) }
     Then { subject.valid?(friday) }
   end
-
 end

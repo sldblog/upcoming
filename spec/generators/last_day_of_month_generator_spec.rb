@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Upcoming::LastDayOfMonthGenerator do
-
   Given(:subject) { Upcoming::LastDayOfMonthGenerator.new }
   When(:valid) { subject.valid?(date) }
 
@@ -24,5 +23,4 @@ describe Upcoming::LastDayOfMonthGenerator do
     Given(:date) { Date.parse('2012-02-29') }
     Then { valid }
   end
-
 end

@@ -14,27 +14,48 @@ Recurring date sequence generator.
 ```ruby
 # running on 20th of June, 2014
 > factory = Upcoming::Factory.every(:last_day_of_month)
-=> #<Upcoming::Factory:0xb8ba6838 @options={:from=>#<Date: 2014-06-20 ((2456829j,0s,0n),+0s,2299161j)>}, @chain=[#<Upcoming::LastDayOfMonthGenerator:0xb8ba6310 @choose=:first>]>
+=> #<Upcoming::Factory:0xb8ba6838 @options={:from=>#<Date: 2014-06-20 ((2456829j,0s,0n),+0s,2299161j)>},
+     @chain=[#<Upcoming::LastDayOfMonthGenerator:0xb8ba6310 @choose=:first>]>
 
 > factory.first
 => #<Date: 2014-06-30 ((2456839j,0s,0n),+0s,2299161j)>
 
 > factory.take(12).map(&:iso8601)
-=> ["2014-06-30", "2014-07-31", "2014-08-31", "2014-09-30", "2014-10-31", "2014-11-30", "2014-12-31", "2015-01-31", "2015-02-28", "2015-03-31", "2015-04-30", "2015-05-31"]
+=> ["2014-06-30", "2014-07-31", "2014-08-31", "2014-09-30", "2014-10-31", "2014-11-30",
+    "2014-12-31", "2015-01-31", "2015-02-28", "2015-03-31", "2015-04-30", "2015-05-31"]
 ```
 
-It is possible to chain methods together. Running sequentially, the methods will first test whether the date given for them is valid and if it is not, alter the previous result. Any number of chains can be added.
+It is possible to chain methods together. Any number of chains can be added.
+
+Chaining forward in time is done via `then_find_upcoming`:
 
 ```ruby
-> factory.then_find_first(:working_day).take(12).map(&:iso8601)
-=> ["2014-06-30", "2014-07-31", "2014-09-01", "2014-09-30", "2014-10-31", "2014-12-01", "2014-12-31", "2015-02-02", "2015-03-02", "2015-03-31", "2015-04-30", "2015-06-01"]
+> Upcoming::Factory.every(:last_day_of_month).then_find_upcoming(:working_day).take(12).map(&:iso8601)
+=> ["2014-06-30", "2014-07-31", "2014-09-01", "2014-09-30", "2014-10-31", "2014-12-01",
+    "2014-12-31", "2015-02-02", "2015-03-02", "2015-03-31", "2015-04-30", "2015-06-01"]
 ```
 
-Chaining backwards:
+Stepping backwards in time is done via `then_find_preceding`:
 
 ```ruby
-> Upcoming::Factory.every(:last_day_of_month, from: '2014-08-20').then_find_latest(:working_day).first
+> Upcoming::Factory.every(:last_day_of_month, from: '2014-08-20').then_find_preceding(:working_day).first
 => #<Date: 2014-08-29 ((2456899j,0s,0n),+0s,2299161j)>
+```
+
+Chaining the same method has no effect:
+
+```ruby
+Upcoming::Factory.every(:last_day_of_month, from: '2014-06-20')
+  .then_find_upcoming(:working_day)
+  .take(3).map(&:iso8601)
+=> ["2014-06-30", "2014-07-31", "2014-09-01"]
+
+Upcoming::Factory.every(:last_day_of_month, from: '2014-06-20')
+  .then_find_upcoming(:working_day)
+  .then_find_upcoming(:working_day)
+  .then_find_upcoming(:working_day)
+  .take(3).map(&:iso8601)
+=> ["2014-06-30", "2014-07-31", "2014-09-01"]
 ```
 
 ## Generators
