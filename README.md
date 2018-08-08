@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/sldblog/upcoming.svg)](https://travis-ci.org/sldblog/upcoming)
 [![Code Climate](https://codeclimate.com/github/sldblog/upcoming.png)](https://codeclimate.com/github/sldblog/upcoming)
-[![Dependency Status](https://gemnasium.com/sldblog/upcoming.svg)](https://gemnasium.com/sldblog/upcoming)
 
 Recurring date sequence generator.
 
