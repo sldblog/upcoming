@@ -40,7 +40,7 @@ module Upcoming
       options[:from] ||= Date.today
       if options[:from].is_a? String
         iso = options[:from] =~ /\d{4}-\d{2}-\d{2}/
-        raise ArgumentError, 'Please use ISO dates (YYYY-MM-DD) as those are not ambigious.' unless iso
+        raise ArgumentError, 'Please use ISO dates (YYYY-MM-DD) as those are not ambiguous.' unless iso
       end
       options[:from] = options[:from].to_date if options[:from].respond_to? :to_date
       options

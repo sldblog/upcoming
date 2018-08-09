@@ -2,7 +2,8 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased][unreleased]
-- No changes that affect gem usage as of yet.
+### Fixed
+- The date format error message now contains the correct spelling of "ambiguous".
 
 ## [0.2.0][0.2.0] - 2016-06-23
 ### Changed (breaking changes)

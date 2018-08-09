@@ -52,7 +52,7 @@ describe Upcoming::Factory do
 
       context 'generates error if given as non-ISO date' do
         Given(:date) { '01/05/2014' }
-        Then { result == Failure(ArgumentError, /Please use ISO dates \(YYYY-MM-DD\) as those are not ambigious/) }
+        Then { result == Failure(ArgumentError, /Please use ISO dates \(YYYY-MM-DD\) as those are not ambiguous/) }
       end
     end
   end
