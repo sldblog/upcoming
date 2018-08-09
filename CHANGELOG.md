@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased][unreleased]
+### Changed
+- Generators are configured with `direction` and not `choose`.
+
 ### Fixed
 - The date format error message now contains the correct spelling of "ambiguous".
 

@@ -49,7 +49,7 @@ module Upcoming
     def create_generator(name, direction)
       class_name = name.to_s.classify + 'Generator'
       generator_class = Upcoming.const_get class_name
-      generator_class.new(choose: direction)
+      generator_class.new(direction: direction)
     end
   end
 end

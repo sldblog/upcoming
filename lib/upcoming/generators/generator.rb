@@ -1,9 +1,9 @@
 module Upcoming
   class Generator
-    attr_reader :choose
+    attr_reader :direction
 
     def initialize(options = {})
-      @choose = options.fetch(:choose, :upcoming)
+      @direction = options.fetch(:direction, :upcoming)
     end
 
     def step(from)
@@ -13,7 +13,7 @@ module Upcoming
     private
 
     def date_range(date)
-      return date.downto(date.prev_year) if choose == :preceding
+      return date.downto(date.prev_year) if direction == :preceding
       date.upto(date.next_year)
     end
   end
