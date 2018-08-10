@@ -84,4 +84,22 @@ describe Upcoming::Factory do
       end
     end
   end
+
+  context 'configured generators' do
+    class Upcoming::DivisibleByNDayGenerator < Upcoming::Generator
+      def initialize(options = {})
+        super(options)
+        @n = options.fetch(:n, 1)
+      end
+
+      def valid?(date)
+        date.day % @n == 0
+      end
+    end
+
+    context 'passes configuration to the generators' do
+      Given(:subject) { Upcoming::Factory.every(:divisible_by_n_day, n: 2) }
+      Then { result == %w(2014-06-16 2014-06-18 2014-06-20) }
+    end
+  end
 end
