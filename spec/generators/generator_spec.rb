@@ -30,7 +30,7 @@ describe Upcoming::Generator do
   end
 
   context 'forward in time' do
-    Given(:subject) { Upcoming::FakeGenerator.new(choose: :upcoming) }
+    Given(:subject) { Upcoming::FakeGenerator.new(direction: :upcoming) }
 
     returns_the_starting_date_if_it_is_valid
 
@@ -51,7 +51,7 @@ describe Upcoming::Generator do
   end
 
   context 'backward in time' do
-    Given(:subject) { Upcoming::FakeGenerator.new(choose: :preceding) }
+    Given(:subject) { Upcoming::FakeGenerator.new(direction: :preceding) }
 
     returns_the_starting_date_if_it_is_valid
 

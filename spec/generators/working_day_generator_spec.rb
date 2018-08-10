@@ -24,4 +24,15 @@ describe Upcoming::WorkingDayGenerator do
     Then { subject.valid?(thursday) }
     Then { subject.valid?(friday) }
   end
+
+  context 'with a set of non-working days configured' do
+    Given(:good_friday) { Date.parse('2018-03-30') }
+    Given(:easter_monday) { Date.parse('2018-04-02') }
+    Given(:subject) { Upcoming::WorkingDayGenerator.new(holidays: [good_friday, easter_monday]) }
+
+    Then { subject.valid?(good_friday - 1) }
+    Then { !subject.valid?(good_friday) }
+    Then { !subject.valid?(easter_monday) }
+    Then { subject.valid?(easter_monday + 1) }
+  end
 end

@@ -52,7 +52,7 @@ describe Upcoming::Factory do
 
       context 'generates error if given as non-ISO date' do
         Given(:date) { '01/05/2014' }
-        Then { result == Failure(ArgumentError, /Please use ISO dates \(YYYY-MM-DD\) as those are not ambigious/) }
+        Then { result == Failure(ArgumentError, /Please use ISO dates \(YYYY-MM-DD\) as those are not ambiguous/) }
       end
     end
   end
@@ -82,6 +82,24 @@ describe Upcoming::Factory do
         Given(:subject) { Upcoming::Factory.every(:buzz).then_find_preceding(:fizz) }
         Then { result == %w(2014-06-18 2014-06-24 2014-06-30) }
       end
+    end
+  end
+
+  context 'configured generators' do
+    class Upcoming::DivisibleByNDayGenerator < Upcoming::Generator
+      def initialize(options = {})
+        super(options)
+        @n = options.fetch(:n, 1)
+      end
+
+      def valid?(date)
+        date.day % @n == 0
+      end
+    end
+
+    context 'passes configuration to the generators' do
+      Given(:subject) { Upcoming::Factory.every(:divisible_by_n_day, n: 2) }
+      Then { result == %w(2014-06-16 2014-06-18 2014-06-20) }
     end
   end
 end

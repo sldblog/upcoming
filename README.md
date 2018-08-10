@@ -9,16 +9,15 @@ The current version is [![Gem Version](https://badge.fury.io/rb/upcoming.svg)](h
 
 ## Examples
 
-`Upcoming::Factory.every` will generate sequences using the given method. This uses an enumerator so any number of dates can be queried.
+`Upcoming::Factory.every` will return an infinite sequence that is defined by the generators called.
+
+Please find the integration test examples in [`spec/integration_spec.rb`](spec/integration_spec.rb).
 
 ```ruby
 # running on 20th of June, 2014
 > factory = Upcoming::Factory.every(:last_day_of_month)
 => #<Upcoming::Factory:0xb8ba6838 @options={:from=>#<Date: 2014-06-20 ((2456829j,0s,0n),+0s,2299161j)>},
      @chain=[#<Upcoming::LastDayOfMonthGenerator:0xb8ba6310 @choose=:first>]>
-
-> factory.first
-=> #<Date: 2014-06-30 ((2456839j,0s,0n),+0s,2299161j)>
 
 > factory.take(12).map(&:iso8601)
 => ["2014-06-30", "2014-07-31", "2014-08-31", "2014-09-30", "2014-10-31", "2014-11-30",
@@ -57,6 +56,9 @@ Upcoming::Factory.every(:last_day_of_month, from: '2014-06-20')
   .take(3).map(&:iso8601)
 => ["2014-06-30", "2014-07-31", "2014-09-01"]
 ```
+
+This is due to the current implementation, which only moves dates when "generators" do not "match" the date being tested.
+Ie. if the date being tested is a Monday, all 3 "working day" generators will say "yes, it's a working day" and will not attempt to find another date.
 
 ## Generators
 
