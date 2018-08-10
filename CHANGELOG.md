@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased][unreleased]
+### Added
+- `:working_day` generator can now optionally take a `holidays: []` array for additional non-working days.
+
 ### Changed
 - Generators are configured with `direction` and not `choose`.
 
