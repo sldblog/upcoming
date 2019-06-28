@@ -1,3 +1,8 @@
+:warning: https://github.com/gocardless/business implements most of this gem's functionality and has
+better support. Did you consider that instead? :smile:
+
+
+
 # upcoming
 
 [![Build Status](https://travis-ci.org/sldblog/upcoming.svg)](https://travis-ci.org/sldblog/upcoming)
