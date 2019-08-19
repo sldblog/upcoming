@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.2.2'
 
-  s.add_dependency 'activesupport', '~> 5.0'
+  s.add_dependency 'activesupport', '>= 5', '< 7'
   %w(rake minitest-given).each do |d|
     s.add_development_dependency d
   end
