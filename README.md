@@ -1,6 +1,6 @@
-:warning: https://github.com/gocardless/business implements most of this gem's functionality and has
-better support. Did you consider that instead? :smile:
+This repo is now archived.
 
+:warning: https://github.com/gocardless/business implements most of this gem's functionality and has better support :smile:
 
 
 # upcoming
